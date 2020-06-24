@@ -1,0 +1,619 @@
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans+TC:300,400&subset=chinese-traditional');
+@import 'breakpoint';
+@import 'variables';
+
+
+.container {
+  display: flex;
+  position: relative;
+  height: 100%;
+
+  &-left {
+    position: relative;
+    height: 100vh;
+    overflow: hidden;
+    width: calc(100vw - #{$width_container_right});
+  }
+
+  &-right {
+    position: relative;
+    background-color: #fff;
+    border: 1px solid $bg_blue;
+    width: $width_container_right;
+    overflow: auto;
+    overflow-x: hidden;
+    z-index: 9;
+    box-shadow: -3px 3px 6px rgba(#000, 0.3);
+
+    .header-site {
+      width: $width_container_right;
+      padding: 10px;
+      top: 0;
+      text-align: center;
+      font-size: 30px;
+      font-weight: 400;
+      color: #fff;
+      text-shadow: 0px 4px 4px rgba(#000, 0.5);
+      background-color: $bg_blue;
+      z-index: 9;
+    }
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
+
+  @include ae768 {
+    display: block;
+
+    &-left {
+      width: 100vw;
+      height: 45vh;
+      top: 0;
+      left: 0;
+      border-bottom: 1px solid rgba(#000, 0.3);
+      z-index: 3;
+    }
+
+    &-right {
+      width: 100vw;
+      height: 55vh;
+      z-index: 5;
+
+      .header-site {
+        width: 100vw;
+        padding: 4px;
+        top: 44.5%;
+        font-size: 22px;
+        text-shadow: none;
+      }
+    }
+  }
+}
+
+/* 圖台 */
+#viewerIframe {
+  height: 100%;
+  width: 100%;
+  border: none;
+
+  @include ae768 {
+    height: 100%;
+  }
+}
+
+.people {
+  display: none;
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 99rem;
+  background-color: #000;
+  z-index: 0;
+
+  .status {
+    text-align: center;
+    overflow: hidden;
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    min-width: 50px;
+    height: 154px;
+
+    a {
+      font-size: 16px;
+      cursor: pointer;
+
+      &.selected {
+        font-weight: 400;
+        color: $bg_blue;
+
+      }
+    }
+
+    .statusLight {
+      margin: auto;
+      width: 15px;
+      height: 15px;
+      border-radius: 99rem;
+      transition: all ease 0.3s;
+      cursor: pointer;
+
+      &.green {
+        background-color: $signal_green;
+      }
+
+      &.yellow {
+        background-color: $signal_yellow;
+      }
+
+      &.orange {
+        background-color: $signal_orange;
+      }
+
+      &.red {
+        background-color: $signal_red;
+      }
+    }
+  }
+
+  .line {
+    margin: auto;
+    width: 1px;
+    height: 120px;
+    background-color: #000;
+    border: none;
+  }
+}
+
+.info {
+  padding: 20px;
+
+  .situation {
+    // margin-top: 15px;
+    display: flex;
+    align-items: center;
+
+    .icon {
+      margin-right: 5px;
+
+      &::before {
+        content: '';
+        display: inline-block;
+        width: 15px;
+        height: 15px;
+        border-radius: 99rem;
+
+        @include ae768 {
+          width: 13px;
+          height: 13px;
+        }
+      }
+
+      &.green::before {
+        background-color: $signal_green;
+      }
+
+      &.yellow::before {
+        background-color: $signal_yellow;
+      }
+
+      &.orange::before {
+        background-color: $signal_orange;
+      }
+
+      &.red::before {
+        background-color: $signal_red;
+      }
+    }
+  }
+
+  @include ae1540 {
+    padding: 10px;
+  }
+
+  @include ae768 {
+    margin-top: 0;
+    padding: 6px;
+  }
+}
+
+.people {
+  &-list {
+    background-color: $bg_lightgrey;
+    height: 130px;
+    overflow: auto;
+    width: 100%;
+
+    &__header {
+      position: relative;
+      margin: 2px 10px;
+      display: flex;
+
+      @include ae768 {
+        line-height: 38px;
+      }
+
+      &__comment {
+        font-size: 13px;
+
+        @include ae768 {
+          display: none
+        }
+      }
+
+      &__search {
+        display: flex;
+
+        &__input {
+          border-radius: 5px;
+          width: 200px;
+
+          @include ae768 {
+            width: 170px;
+          }
+        }
+
+        &__btn {
+          cursor: pointer;
+          width: 50px;
+          height: 30px;
+          line-height: 30px;
+          text-align: center;
+          border-radius: 5px;
+          background-color: #A5DEE4;
+          margin: 0 5px;
+          font-weight: 600;
+        }
+
+        @include ae768 {
+          padding: 4px 0 5px 10px;
+        }
+      }
+    }
+
+    &__item-list__item {
+      width: 32%;
+      margin: 3px;
+      display: inline-block;
+      text-align: center;
+      cursor: pointer;
+
+      @include ae768 {
+        display: inline-block;
+        padding: 4px 6px;
+      }
+
+      &:hover {
+        color: $bg_blue;
+        background-color: $bg_grey;
+        transform: translateY(-2px);
+        transition: all ease 0.3s;
+
+        @include ae768 {
+          border: none;
+          transform: none;
+        }
+      }
+
+      &.warning {
+        &--tumble {
+          animation-name: warning--tumble;
+          animation-duration: 900ms;
+          animation-iteration-count: calc(180/0.9);
+        }
+
+        &--fall {
+          animation-name: warning--fall;
+          animation-duration: 900ms;
+          animation-iteration-count: calc(180/0.9);
+        }
+
+        &--coma {
+          animation-name: warning--coma;
+          animation-duration: 900ms;
+          animation-iteration-count: calc(180/0.9);
+        }
+      }
+    }
+  }
+
+  &-card {
+    padding: 25px;
+    opacity: 0;
+    display: none;
+
+    @include ae768 {
+      margin: 0;
+      padding: 4px 10px;
+      border: none;
+    }
+
+    &-title {
+      margin-bottom: 8px;
+      color: $bg_blue;
+      font-size: 28px;
+      font-weight: 400;
+
+      @include ae768 {
+        font-size: 22px;
+      }
+
+      // 人員狀態顯示
+      &::after {
+        content: '';
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        margin-left: 5px;
+        border-radius: 99rem;
+
+        @include ae768 {
+          width: 15px;
+          height: 15px;
+        }
+      }
+
+      &.green::after {
+        background-color: $signal_green;
+      }
+
+      &.yellow::after {
+        background-color: $signal_yellow;
+      }
+
+      &.orange::after {
+        background-color: $signal_orange;
+      }
+
+      &.red::after {
+        background-color: $signal_red;
+      }
+    }
+
+    &-detail {
+      @include ae768 {
+        display: flex;
+      }
+
+      &-item {
+        margin: 0 0 5px 0;
+
+        @include ae768 {
+          margin: 0;
+        }
+      }
+
+      &-column {
+        flex: 1;
+      }
+    }
+
+    &-image {
+      width: 150px;
+      height: 150px;
+      margin-right: 25px;
+
+      @include ae768 {
+        display: none;
+      }
+    }
+
+    &-top {
+      display: flex;
+      align-items: center;
+
+      @include ae768 {
+        display: block;
+      }
+    }
+
+    &-bottom {
+      margin-top: 10px;
+      padding-top: 10px;
+      position: relative;
+      border-top: 1px solid $bg_grey;
+
+      @include ae768 {
+        margin-top: 6px;
+        padding-top: 6px;
+      }
+
+      #modelSelect {
+        position: absolute;
+        top: 10px;
+        right: 100px;
+        width: 80px;
+
+        @include ae768 {
+          right: 5px;
+          top: 60px;
+        }
+      }
+
+      #timeSlotSelect {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        width: 80px;
+
+        @include ae768 {
+          right: 5px;
+          top: 30px;
+        }
+      }
+
+      #accidentDetail {
+        max-height: 200px;
+      }
+    }
+  }
+}
+
+
+// 警告訊息窗
+.warning {
+  position: absolute;
+  width: 260px;
+  max-height: 250px;
+  position: fixed;
+  -webkit-backface-visibility: hidden;
+  top: 50px;
+  left: 50px;
+  display: none;
+  color: $warn_title;
+  background-color: $warn_bg;
+  border: 3px solid $warn_title;
+  z-index: 100;
+
+  @include ae768 {
+    width: 160px;
+    top: 2px;
+    left: 2px;
+    border: none;
+    background-color: rgba($warn_bg, 0.85);
+  }
+
+  &__title {
+    cursor: pointer;
+
+    &__text {
+      font-size: 26px;
+      font-weight: 400;
+    }
+
+    &__close {
+      width: 20px;
+      height: 20px;
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      cursor: pointer;
+    }
+
+    &__close::after,
+    &__close::before {
+      content: '';
+      height: 20px;
+      border-left: 2px solid $warn_title;
+      position: absolute;
+      left: 8px;
+    }
+
+    &__close::after {
+      transform: rotate(45deg);
+    }
+
+    &__close::before {
+      transform: rotate(-45deg);
+    }
+
+    @include ae768 {
+      background-color: rgba($warn_bg, 0.7);
+
+      &__image {
+        width: 24px;
+        height: 24px;
+      }
+
+      &__text {
+        font-size: 16px;
+      }
+
+      &__close {
+        top: 3px;
+        right: 2px;
+        height: 15px;
+      }
+
+      &__close::after,
+      &__close::before {
+        height: 15px
+      }
+    }
+  }
+
+  &__list {
+    &__item {
+      margin: 0;
+      padding: 10px;
+      color: $warn_text;
+
+      &--state {
+        font-weight: 800;
+      }
+
+      &--nearest {
+        font-size: 16px;
+      }
+
+      @include ae768 {
+        padding: 0 6px;
+        font-size: 14px;
+
+        &--name,
+        &--state {
+          font-size: 14px;
+        }
+
+        &--nearest {
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}
+
+// 彈出畫面, 無搜尋結果時彈出
+.popFrame {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: none;
+
+  &__info {
+    position: relative;
+    padding: 5px 10px;
+    background-color: #fff;
+    border-radius: 10px;
+  }
+
+  p {
+    height: 50px;
+    line-height: 50px;
+    font-size: 30px;
+    color: #E83015;
+    font-weight: 600;
+    text-align: center;
+  }
+
+  &.active {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 15;
+  }
+
+  .btn {
+    cursor: pointer;
+
+    &--close {
+      width: 20px;
+      height: 20px;
+      opacity: 0.7;
+
+      &::before,
+      &::after {
+        position: absolute;
+        content: '';
+        display: block;
+        margin: 0;
+        padding: 0;
+        height: 30px;
+        border-left: 5px solid #fff;
+        top: 30%;
+        right: 20%;
+      }
+
+      &::before {
+        transform: rotate(45deg)
+      }
+
+      &::after {
+        transform: rotate(-45deg)
+      }
+    }
+  }
+}
+
+#chart-container {
+  position: relative;
+}
+
+#visualize-bar {
+  margin-top: 10px;
+}

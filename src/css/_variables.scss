@@ -1,0 +1,126 @@
+// variables
+$bg_blue: #0099ff;
+$bg_lightgrey: #f8f8f8;
+$bg_grey: #BDC0BA;
+
+$signal_green: #49ff01;
+$signal_yellow: #ffff00;
+$signal_orange: #ff7300;
+$signal_red: #ff0000;
+
+$warn_title:#D0104C;
+$warn_text:#fff;
+$warn_bg:#0F2540;
+
+$width_container_right: 40vw;
+
+// base
+* {
+  box-sizing: border-box;
+
+  font: {
+    family: 'Noto Sans TC', sans-serif;
+    weight: 300;
+    size: 18px;
+  }
+
+  @include ae768 {
+    font-size: 16px;
+  }
+}
+
+html {
+  width: 100vw;
+  height: 100%;
+  overflow: hidden;
+  overflow: -moz-hidden-unscrollable;
+}
+
+body {
+  height: 100%;
+  margin: 0;
+}
+
+p {
+  margin: 0;
+  padding: 0;
+}
+
+// div-scroll
+.scroll-box {
+  overflow: auto;
+}
+
+// comment
+.comment {
+  color: #808080;
+}
+
+.fixed--top {
+  position: fixed;
+  top: 0;
+  left: 0;
+}
+
+.flex--center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.unselectable {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+input {
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  appearance: none;
+}
+
+// blinkingWarning
+@mixin keyframes ($name) {
+  @-webkit-keyframes #{$name} {
+    @content;
+  }
+
+  @-moz-keyframes #{$name} {
+    @content;
+  }
+
+  @-ms-keyframes #{$name} {
+    @content;
+  }
+
+  @keyframes #{$name} {
+    @content;
+  }
+}
+
+
+//tumble 墜落 紅, fall 跌倒 黃, tumble 昏迷 橘
+$signal_names: 'tumble',
+'fall',
+'coma';
+$signal_colors: #D0104C,
+#DDD23B,
+#ff7300;
+
+@for $i from 1 through length($signal_names) {
+  @include keyframes(warning--#{nth($signal_names,$i)}) {
+    from {
+      font-weight: 400;
+      background-color: $bg_lightgrey;
+      color: black;
+    }
+
+    to {
+      color: #fff;
+      font-weight: 400;
+      background-color: #{nth($signal_colors, $i)};
+    }
+  }
+}

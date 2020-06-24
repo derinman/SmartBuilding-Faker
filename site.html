@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta http-equiv="Pragma" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Cache-Control" content="no-cache" />
+  <meta http-equiv="EXPIRES" content="0">
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>工地安全雲端監測系統</title>
+  <link rel="shortcut icon" href="">
+  <link rel="stylesheet" href="./dist/css/allStyle.min.css?20200521">
+</head>
+
+<body>
+  <!-- popFrame info -->
+  <div class="popFrame">
+    <div class="popFrame__info"></div>
+    <div class="btn btn--close"></div>
+  </div>
+
+  <div class="container">
+    <div class="container-left">
+      <iframe id="viewerIframe"></iframe>
+      <div class="marker-list"></div>
+    </div>
+
+    <div class="container-right">
+      <header class="header-site">工地安全雲端監測系統</header>
+      <div class="info">
+        <p>更新時間：<span id="latestInfoDate"></span></p>
+        <div class="situation">
+          <p>狀態說明：</p>
+          <div class="icon green">正常</div>
+          <div class="icon yellow">跌倒</div>
+          <div class="icon orange">昏迷</div>
+          <div class="icon red">墜落</div>
+        </div>
+      </div>
+      <div class="people-table">
+        <div class="people-list">
+          <header class="people-list__header">人員列表：
+            <span class="people-list__header__comment">(已參與本工程之人員)</span>
+            <div class="people-list__header__search">
+              <input class="people-list__header__search__input" placeholder="欲搜尋的人員名稱"></input>
+              <div class="people-list__header__search__btn">搜尋</div>
+            </div>
+          </header>
+          <div class="people-list__item-list"></div>
+        </div>
+        <div class="people-card">
+          <section class="people-card-top">
+            <div>
+              <img id="userImg" class="people-card-image" src="" alt="user icon">
+            </div>
+            <div>
+              <p id="userId" class="people-card-title"></p>
+              <section class="people-card-detail">
+                <div class="people-card-detail-column">
+                  <p class="people-card-detail-item">資料更新時間：<br><span id="userTime">0</span></p>
+                  <p class="people-card-detail-item">總異常次數：<span id="accidentCounts">0</span></p>
+                  <p class="people-card-detail-item">總前兆次數：<span id="portentCounts">0</span></p>
+                  <!-- <p>心率：<span id="userHeartRate">70</span></p> -->
+                </div>
+                <div class="people-card-detail-column">
+                  <p class="people-card-detail-item">經度：<span id="userLongitude"></span></p>
+                  <p class="people-card-detail-item">緯度：<span id="userLatitude"></span></p>
+                </div>
+              </section>
+            </div>
+          </section>
+          <section class="people-card-bottom">
+            <div id="historyTable">
+              <p>日期：<span id="historyTableDate"></span></p>
+              <p>異常次數：<span id="periodAccidentCounts">0</span> 次</p>
+              <p>前兆次數：<span id="periodPortentCounts">0</span> 次</p>
+              <select id="modelSelect">
+                <option value="列表">列表</option>
+                <!-- <option value="圖表">測試中</option> -->
+              </select>
+              <select id="timeSlotSelect">
+                <option value="今日">今日</option>
+                <option value="昨日">昨日</option>
+                <option value="近三日">近三日</option>
+                <option value="一周">一周</option>
+              </select>
+              <p id="accHeader">異常事件歷程：</p>
+              <div class="scroll-box" id="accidentDetail"></div>
+              <div id="chart-container">
+                <canvas id="visualize-por-pie"></canvas>
+                <canvas id="visualize-acc-pie"></canvas>
+                <canvas id="visualize-bar"></canvas>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+    <div class="warning scroll-box">
+      <header class="warning__title flex--center">
+        <img class="warning__title__image" src="./src/img/alarm.png" width="40" height="40">
+        <strong class="warning__title__text">WARNING</strong>
+        <span class="warning__title__close"></span>
+      </header>
+      <div class="warning__list"></div>
+    </div>
+  </div>
+
+  <!-- firebase init -->
+  <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/6.2.0/firebase-database.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.bundle.min.js"></script>
+  <script defer src="./src/js/config.js?20200521"></script>
+  <script defer src="./src/js/simpleViewer.js?20200521"></script>
+  <script defer src="./src/js/people.js?20200521"></script>
+  <script defer src="./src/js/getFirebaseData.js?20200521"></script>
+</body>
+
+</html>

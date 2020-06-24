@@ -1,0 +1,6 @@
+修改 testData 中的數據，開起網頁發送 request 即可
+注意小心不要用到刪除或是發送路徑不完整或是 set 參數為空
+
+db.ref(`/CTC/${testData.date}_${testData.time}_${testData.id}`).set(testData);
+
+中間那些 input 請暫時忽略，原本預計為編寫成簡易 crud 操作 firebase 用
