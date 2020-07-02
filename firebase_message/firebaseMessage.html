@@ -25,7 +25,8 @@
   </script>
   <!-- 結束 -->
 
-<script>
+  <script>
+    /*
     let testData = {
       id: 'inman2',
       idDevice: 'test-mobile',
@@ -43,9 +44,8 @@
       accZ: 0,
     }
     console.log(testData);
-    
-var testData2 = {}
-
+    */
+  var testData2 = {}
   function addtestData2Item(form) {
     testData2 = {             
                   id:form.id.value,
@@ -65,7 +65,7 @@ var testData2 = {}
                   };
     return false;
   }
-</script>
+  </script>
 
 
 
@@ -100,7 +100,6 @@ var testData2 = {}
       <input name="longitude" value="121.568989"><br>
       <label for="heartRate">heartRate</label>
       <input name="heartRate" value="60"><br>
-    
       <input type="submit" value="Add item">
       <input type="button" value="Show list" onclick="console.log(testData2)">
     </form>
