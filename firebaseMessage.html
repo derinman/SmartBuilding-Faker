@@ -23,55 +23,10 @@
     };
     firebase.initializeApp(config);
   </script>
-  <!-- 結束 -->
-
-  <script>
-    /*
-    let testData = {
-      id: 'inman2',
-      idDevice: 'test-mobile',
-      date: '2020-06-05',
-      time: '11:42:00:000',
-      accident: 0,
-      latitude: 25.050062, 
-      longitude: 121.568989,
-      portent: 1,
-      site: 'CTC',
-      altitude: 37,
-      heartRate: 60,
-      accX: 0,
-      accY: 0,
-      accZ: 0,
-    }
-    console.log(testData);
-    */
-  var testData2 = {}
-  function addtestData2Item(form) {
-    testData2 = {             
-                  id:form.id.value,
-                  idDevice:form.idDevice.value,
-                  date:form.date.value,
-                  time:form.time.value,
-                  accident:parseInt(form.accident.value),
-                  latitude:parseFloat(form.latitude.value),
-                  accX:parseInt(form.accX.value),
-                  accY:parseInt(form.accY.value),
-                  accZ:parseInt(form.accZ.value),
-                  portent:parseInt(form.portent.value),
-                  site:form.site.value,
-                  altitude:parseFloat(form.altitude.value),
-                  longitude:parseFloat(form.longitude.value),
-                  heartRate:parseFloat(form.heartRate.value),
-                  };
-    return false;
-  }
-  </script>
-
-
 
   <div class="info">
-    <div class="info--title">工安監控 測資輸入</div>
-    <form onsubmit="return addtestData2Item(this)">
+    <div class="info--title">工安監控 測資輸入(一般)</div>
+    <form onsubmit="return addtestDataItem(this)">
       <label for="id">id</label>
       <input name="id" value="inman2"><br>
       <label for="idDevice">idDevice</label>
@@ -101,13 +56,94 @@
       <label for="heartRate">heartRate</label>
       <input name="heartRate" value="60"><br>
       <input type="submit" value="Add item">
-      <input type="button" value="Show list" onclick="console.log(testData2)">
+      <input type="button" value="Show list" onclick="console.log(testData)">
     </form>
-
     <button onclick="writeData()">發送測試資料</button>
+  </div>
+  
+  <br>
+  
+  <div class="info">
+    <div class="info--title">工安監控 測資輸入(機具)</div>
+    <form onsubmit="return addtestDataMachineItem(this)">
+      <label for="id">id</label>
+      <input name="id" value="inman2"><br>
+      <label for="idDevice">idDevice</label>
+      <input name="idDevice" value="test-mobile"><br>
+      <label for="date">date</label>
+      <input name="date" value="" type="date" class="date"><br>
+      <label for="time">time</label>
+      <input name="time" value="00:00:00:000" class="time"><br>
+      <label for="accident">accident</label>
+      <input name="accident" value="0" ><br>
+      <label for="latitude">latitude</label>
+      <input name="latitude" min="25.049914" max="25.050234" step="0.000001" type="range"><br>
+      <label for="longitude">longitude</label>
+      <input name="longitude" min="121.568852" max="121.569117" step="0.000001" type="range"><br>
+      <label for="accX">accX</label>
+      <input name="accX" value="0"><br>
+      <label for="accY">accY</label>
+      <input name="accY" value="0"><br>
+      <label for="accZ">accZ</label>
+      <input name="accZ" value="0"><br>
+      <label for="portent">portent</label>
+      <input name="portent" value="1"><br>
+      <label for="site">site</label>
+      <input name="site" value="CTC"><br>
+      <label for="altitude">altitude</label>
+      <input name="altitude" value="37"><br>
+      <label for="heartRate">heartRate</label>
+      <input name="heartRate" value="60"><br>
+      <input type="submit" value="Add item">
+      <input type="button" value="Show list" onclick="console.log(testDataMachine)">
+    </form>
+    <button onclick="writeDataMachine()">發送測試資料</button>
   </div>
 
   <script>
+    var testData= {}
+    function addtestDataItem(form) {
+      testData= {             
+                  id:form.id.value,
+                  idDevice:form.idDevice.value,
+                  date:form.date.value,
+                  time:form.time.value,
+                  accident:parseInt(form.accident.value),
+                  latitude:parseFloat(form.latitude.value),
+                  accX:parseInt(form.accX.value),
+                  accY:parseInt(form.accY.value),
+                  accZ:parseInt(form.accZ.value),
+                  portent:parseInt(form.portent.value),
+                  site:form.site.value,
+                  altitude:parseFloat(form.altitude.value),
+                  longitude:parseFloat(form.longitude.value),
+                  heartRate:parseFloat(form.heartRate.value),
+                  };
+    return false;
+    }
+
+    var testDataMachine= {}
+    function addtestDataMachineItem(form) {
+      testDataMachine = {             
+                  id:form.id.value,
+                  idDevice:form.idDevice.value,
+                  date:form.date.value,
+                  time:form.time.value,
+                  accident:parseInt(form.accident.value),
+                  latitude:parseFloat(form.latitude.value),
+                  accX:parseInt(form.accX.value),
+                  accY:parseInt(form.accY.value),
+                  accZ:parseInt(form.accZ.value),
+                  portent:parseInt(form.portent.value),
+                  site:form.site.value,
+                  altitude:parseFloat(form.altitude.value),
+                  longitude:parseFloat(form.longitude.value),
+                  heartRate:parseFloat(form.heartRate.value),
+                  };
+    return false;
+    }
+
+
     // 設定今日為預設
     let d = new Date();
     const dateFormat = (dateObj) => dateObj.split(' ')[0].split('/').map(n => n.length === 1 ? '0' + n : n).join('-')
@@ -123,8 +159,9 @@
     const db = firebase.database()
     let childKeyList = []
     // 寫入資料
-    function writeData(){db.ref(`/CTC/${testData2.date}_${testData2.time}_${testData2.id}`).set(testData2)};
-
+    function writeData(){db.ref(`/CTC/${testData.date}_${testData.time}_${testData.id}`).set(testData)};
+    
+    function writeDataMachine(){db.ref(`/CTC/${testDataMachine.date}_${testDataMachine.time}_${testDataMachine.id}`).set(testDataMachine)};
     // 刪除單一資料
     // db.ref(`/CTC/${testData.date}_${testData.time}_${testData.id}`).remove();
 
