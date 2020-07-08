@@ -28,7 +28,7 @@
     <div class="info--title">工安監控 測資輸入(一般)</div>
     <form onsubmit="return addtestDataItem(this)">
       <label for="id">id</label>
-      <input name="id" value="inman2"><br>
+      <input name="id" value="inman"><br>
       <label for="idDevice">idDevice</label>
       <input name="idDevice" value="test-mobile"><br>
       <label for="date">date</label>
@@ -67,7 +67,7 @@
     <div class="info--title">工安監控 測資輸入(機具)</div>
     <form onsubmit="return addtestDataMachineItem(this)">
       <label for="id">id</label>
-      <input name="id" value="inman2"><br>
+      <input name="id" value="inman"><br>
       <label for="idDevice">idDevice</label>
       <input name="idDevice" value="test-mobile"><br>
       <label for="date">date</label>
@@ -94,6 +94,10 @@
       <input name="altitude" value="37"><br>
       <label for="heartRate">heartRate</label>
       <input name="heartRate" value="60"><br>
+      
+      <label for="machine">machine</label>
+      <input name="machine" value="true"><br>
+
       <input type="submit" value="Add item">
       <input type="button" value="Show list" onclick="console.log(testDataMachine)">
     </form>
@@ -139,10 +143,10 @@
                   altitude:parseFloat(form.altitude.value),
                   longitude:parseFloat(form.longitude.value),
                   heartRate:parseFloat(form.heartRate.value),
+                  machine:JSON.parse(form.machine.value),
                   };
     return false;
     }
-
 
     // 設定今日為預設
     let d = new Date();
@@ -156,12 +160,16 @@
     document.getElementsByClassName("date")[0].value = todayDate;
     document.getElementsByClassName("time")[0].value = todaytime;
 
+    document.getElementsByClassName("date")[1].value = todayDate;
+    document.getElementsByClassName("time")[1].value = todaytime;
+
     const db = firebase.database()
     let childKeyList = []
-    // 寫入資料
+    // 寫入資料(一般)
     function writeData(){db.ref(`/CTC/${testData.date}_${testData.time}_${testData.id}`).set(testData)};
-    
+    // 寫入資料(機具)
     function writeDataMachine(){db.ref(`/CTC/${testDataMachine.date}_${testDataMachine.time}_${testDataMachine.id}`).set(testDataMachine)};
+    
     // 刪除單一資料
     // db.ref(`/CTC/${testData.date}_${testData.time}_${testData.id}`).remove();
 
