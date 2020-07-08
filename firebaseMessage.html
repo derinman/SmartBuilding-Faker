@@ -152,7 +152,7 @@
     let d = new Date();
     const dateFormat = (dateObj) => dateObj.split(' ')[0].split('/').map(n => n.length === 1 ? '0' + n : n).join('-')
     let todayDate = dateFormat(d.toLocaleString('zn-TW'))
-    let todaytime = d.getHours()+":"+d.getMinutes()+":"+d.getSeconds()+":"+"0";
+    let todaytime = d.getHours()+":"+d.getMinutes()+":"+d.getSeconds()+":"+"0000";
     // (new Date().toLocaleString('zn-TW',))
     console.log(todayDate);
     console.log(todaytime);
