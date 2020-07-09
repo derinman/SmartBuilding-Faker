@@ -55,7 +55,7 @@
       <input name="altitude" value="37"><br>
       <label for="heartRate">heartRate</label>
       <input name="heartRate" value="60"><br>
-      <input type="submit" value="Add item">
+      <input type="submit" value="Add item" >
       <input type="button" value="Show list" onclick="console.log(testData)">
     </form>
     <button onclick="writeData()">發送測試資料</button>
@@ -152,7 +152,12 @@
     let d = new Date();
     const dateFormat = (dateObj) => dateObj.split(' ')[0].split('/').map(n => n.length === 1 ? '0' + n : n).join('-')
     let todayDate = dateFormat(d.toLocaleString('zn-TW'))
-    let todaytime = d.getHours()+":"+d.getMinutes()+":"+d.getSeconds()+":"+"0000";
+    
+    function checkTime(i) {
+        return (i < 10) ? "0" + i : i;
+    }
+    let todaytime = checkTime(d.getHours())+":"+checkTime(d.getMinutes())+":"+checkTime(d.getSeconds())+":"+"0000";
+    
     // (new Date().toLocaleString('zn-TW',))
     console.log(todayDate);
     console.log(todaytime);
@@ -170,9 +175,10 @@
     // 寫入資料(機具)
     function writeDataMachine(){db.ref(`/CTC/${testDataMachine.date}_${testDataMachine.time}_${testDataMachine.id}`).set(testDataMachine)};
     
+
     // 刪除單一資料
     // db.ref(`/CTC/${testData.date}_${testData.time}_${testData.id}`).remove();
-
+    //db.ref(`/CTC/`).remove()
     // 刪除 搜尋資料 by value後 remove
     // db.ref(`/${testData.site}`).orderByChild('id').equalTo('測試').once('child_added', function (snapshot) {
       // console.log(snapshot.toJSON())
