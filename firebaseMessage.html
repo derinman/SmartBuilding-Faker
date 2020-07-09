@@ -28,7 +28,7 @@
     <div class="info--title">工安監控 測資輸入(一般)</div>
     <form onsubmit="return addtestDataItem(this)">
       <label for="id">id</label>
-      <input name="id" value="inman"><br>
+      <input name="id" value="伊閩"><br>
       <label for="idDevice">idDevice</label>
       <input name="idDevice" value="test-mobile"><br>
       <label for="date">date</label>
@@ -37,10 +37,12 @@
       <input name="time" value="00:00:00:000" class="time"><br>
       <label for="accident">accident</label>
       <input name="accident" value="0" ><br>
+      
       <label for="latitude">latitude</label>
-      <input name="latitude" min="25.049914" max="25.050234" step="0.000001" type="range"><br>
+      <input name="latitude" min="25.049914" max="25.050234" step="0.000001" type="range" class="latitude"><br>
       <label for="longitude">longitude</label>
-      <input name="longitude" min="121.568852" max="121.569117" step="0.000001" type="range"><br>
+      <input name="longitude" min="121.568852" max="121.569117" step="0.000001" type="range" class="longitude"><br>
+      
       <label for="accX">accX</label>
       <input name="accX" value="0"><br>
       <label for="accY">accY</label>
@@ -67,7 +69,7 @@
     <div class="info--title">工安監控 測資輸入(機具)</div>
     <form onsubmit="return addtestDataMachineItem(this)">
       <label for="id">id</label>
-      <input name="id" value="inman"><br>
+      <input name="id" value="伊閩"><br>
       <label for="idDevice">idDevice</label>
       <input name="idDevice" value="test-mobile"><br>
       <label for="date">date</label>
@@ -76,10 +78,12 @@
       <input name="time" value="00:00:00:000" class="time"><br>
       <label for="accident">accident</label>
       <input name="accident" value="0" ><br>
+      
       <label for="latitude">latitude</label>
-      <input name="latitude" min="25.049914" max="25.050234" step="0.000001" type="range"><br>
+      <input name="latitude" min="25.049914" max="25.050234" step="0.000001" type="range" class="latitude"><br>
       <label for="longitude">longitude</label>
-      <input name="longitude" min="121.568852" max="121.569117" step="0.000001" type="range"><br>
+      <input name="longitude" min="121.568852" max="121.569117" step="0.000001" type="range" class="longitude"><br>
+      
       <label for="accX">accX</label>
       <input name="accX" value="0"><br>
       <label for="accY">accY</label>
@@ -94,15 +98,18 @@
       <input name="altitude" value="37"><br>
       <label for="heartRate">heartRate</label>
       <input name="heartRate" value="60"><br>
-      
       <label for="machine">machine</label>
       <input name="machine" value="true"><br>
+      <label for="machineName">machineName</label>
+      <input name="machineName" value="挖土機XX號"><br>
 
       <input type="submit" value="Add item">
       <input type="button" value="Show list" onclick="console.log(testDataMachine)">
     </form>
     <button onclick="writeDataMachine()">發送測試資料</button>
   </div>
+  <br>
+  <button onclick="delateAllData()">!!  清空firebase資料</button>
 
   <script>
     var testData= {}
@@ -144,30 +151,47 @@
                   longitude:parseFloat(form.longitude.value),
                   heartRate:parseFloat(form.heartRate.value),
                   machine:JSON.parse(form.machine.value),
+                  machineName:form.machineName.value,
                   };
     return false;
     }
 
-    // 設定今日為預設
-    let d = new Date();
-    const dateFormat = (dateObj) => dateObj.split(' ')[0].split('/').map(n => n.length === 1 ? '0' + n : n).join('-')
-    let todayDate = dateFormat(d.toLocaleString('zn-TW'))
-    
+    // 設定今日現在時間為預設
     function checkTime(i) {
         return (i < 10) ? "0" + i : i;
     }
+    function updateTime(){
+    let d = new Date();
+    const dateFormat = (dateObj) => dateObj.split(' ')[0].split('/').map(n => n.length === 1 ? '0' + n : n).join('-')
+    let todayDate = dateFormat(d.toLocaleString('zn-TW'))
     let todaytime = checkTime(d.getHours())+":"+checkTime(d.getMinutes())+":"+checkTime(d.getSeconds())+":"+"0000";
     
-    // (new Date().toLocaleString('zn-TW',))
-    console.log(todayDate);
-    console.log(todaytime);
-
     document.getElementsByClassName("date")[0].value = todayDate;
     document.getElementsByClassName("time")[0].value = todaytime;
-
     document.getElementsByClassName("date")[1].value = todayDate;
     document.getElementsByClassName("time")[1].value = todaytime;
+    }
+    setInterval(updateTime, 1000);
+    
+    //隨機跳動經緯度
+    function updateLatLon(){
+    let latitudeMin = 25.049914;
+    let latitudeMax = 25.050234;
+    let longitudeMin = 121.568852;
+    let longitudeMax = 121.569117;
+    randLatitude = (latitudeMax-latitudeMin)*Math.random()+latitudeMin
+    randLongitude = (longitudeMax-longitudeMin)*Math.random()+longitudeMin
+    
+    document.getElementsByClassName("latitude")[0].value = randLatitude;
+    document.getElementsByClassName("longitude")[0].value = randLongitude;
+    document.getElementsByClassName("latitude")[1].value = randLatitude;
+    document.getElementsByClassName("longitude")[1].value = randLongitude;
+    }
+    setInterval(updateLatLon, 1000);
+    
+    
 
+    //firebase
     const db = firebase.database()
     let childKeyList = []
     // 寫入資料(一般)
@@ -175,6 +199,7 @@
     // 寫入資料(機具)
     function writeDataMachine(){db.ref(`/CTC/${testDataMachine.date}_${testDataMachine.time}_${testDataMachine.id}`).set(testDataMachine)};
     
+    function delateAllData (){db.ref(`/CTC/`).set('')};
 
     // 刪除單一資料
     // db.ref(`/CTC/${testData.date}_${testData.time}_${testData.id}`).remove();
@@ -187,6 +212,6 @@
 
   </script>
 
-</body>
+</body onload="startTime()">
 
 </html>
