@@ -162,8 +162,9 @@
     }
     function updateTime(){
     let d = new Date();
-    const dateFormat = (dateObj) => dateObj.split(' ')[0].split('/').map(n => n.length === 1 ? '0' + n : n).join('-')
-    let todayDate = dateFormat(d.toLocaleString('zn-TW'))
+    let todayDate = d.getFullYear()+'-'+checkTime(d.getMonth()+1)+'-'+checkTime(d.getDate());
+    //const dateFormat = (dateObj) => dateObj.split(' ')[0].split('/').map(n => n.length === 1 ? '0' + n : n).join('-')
+    //let todayDate = dateFormat(d.toLocaleString('zn-TW'))
     let todaytime = checkTime(d.getHours())+":"+checkTime(d.getMinutes())+":"+checkTime(d.getSeconds())+":"+"0000";
     
     document.getElementsByClassName("date")[0].value = todayDate;
