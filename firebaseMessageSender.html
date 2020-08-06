@@ -39,18 +39,16 @@
 
     //設定 伊閩0 為意外人員
 
-    
-
-    //客戶端的tokens 最近人員
+    //客戶端的tokens 代表最近人員
     let tokens = [{id:'伊閩1',token:"dgd5QBGk5AYMpe-qTUuGQ8:APA91bE-0tiruPvQbvy09IPwz8Gk01dPF-7qoUuWC-vOkG_PIdRm6vzo38V2xrZxwWwd2hgcqdX46JoazFLQfTIpDXvP0s4Fztc8vrmZQSIYtjXtPnKjPvvb2qpvtMwuBTrQBDeVXbZ6"},
                 {id:'伊閩2', token:"dOBfifKBXIRHwgkus1hM_V:APA91bFBMEg6qAitKPLBdc6vGoEC0lMWJI1DNcHJzIcfQoyBpYbFbyfCgSl3ngwX31oklv4YusLq03GlC3PRvntTczcarL0Pm-2aBHaHEFzN4PEDWkHvs_AgZec35ZaDPdG0bmdnxR85"},
                 {id:'伊閩3',token:"d3kaR7p9qkiNUBRET0ExaX:APA91bFhsUNe78CMu-30fchg3bgX4g96cibLLeyBpJ0ID6tefrAeJ0bdJf1_fFbM-N8m-txWMK8bgDACEJ7de4NnM6u-zzbbYLKTZ8wpqK6CiSRtGOG9LmYe0JGfHXHV_A5oNIINNg8x"}]
     
-    //let tmp = tokens.filter(data=> data.id==='伊閩1' )
-    //console.log(tmp);
-
     //傳送給單一client
     const sendToClient = (  ) => {
+        
+        let nearestToken = new Object(...(tokens.filter(data => data.id === message.nearestId ))).token;
+        
         fetch('https://fcm.googleapis.com/fcm/send', {
             'method': 'POST',
             'headers': {
@@ -64,13 +62,13 @@
                             'status':message.status
                         }
                     },
-                    "to": "dOBfifKBXIRHwgkus1hM_V:APA91bFBMEg6qAitKPLBdc6vGoEC0lMWJI1DNcHJzIcfQoyBpYbFbyfCgSl3ngwX31oklv4YusLq03GlC3PRvntTczcarL0Pm-2aBHaHEFzN4PEDWkHvs_AgZec35ZaDPdG0bmdnxR85"
+                    "to": nearestToken
             })
             }).then(function(response) {
                 console.log(response);
             }).catch(function(error) {
                 alert(error)});
-        }
+    }
 
     //傳送給所有client
     /*
