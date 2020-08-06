@@ -8,19 +8,21 @@
 
 <p>firebaseMessageSender</p>
 <form onsubmit="return addMessage(this)">
-    <label for="id">id</label><br>
-    <input name="id" value="伊閩"><br>
-    <label for="status">status</label><br>
-    <input type="radio" id="status" name="status" value="僅為誤報，人員安全" checked>
-    <label for="status">僅為誤報</label>
-    <input type="radio" id="status" name="status" value="立即通知救護人員!!" >
-    <label for="status">確認危險</label><br>
+    <label for="id">意外人員id</label><br>
+    <input name="id" value="伊閩0"><br>
+    
+    <label for="nearestId">最近人員id</label><br>
+    <input name="nearestId" value="伊閩1"><br>
+
+    <label for="status">status:</label> <span id="demo"></span><br>
+    <input type="range" id="status" name="status" value="0" min="0" max="9">
+    
     <br>
     <input type="submit" value="Add item">
     <input type="button" value="Show list" onclick="console.log(message)">
 </form>
 
-<button onclick="sendToAllClient(tokens)">發送意外人員回報</button>
+<button onclick="sendToClient('')">發送意外人員回報</button>
 
 <script>
 
@@ -30,17 +32,26 @@
         message = {             
             id:form.id.value,
             status:form.status.value,
+            nearestId: form.nearestId.value,
         };
     return false;
     }
 
-    //客戶端的tokens
-    let tokens = ["dgd5QBGk5AYMpe-qTUuGQ8:APA91bEliFJCDcxozl_O7PsVywLG8LFR5-Y7_FhJxiP7OkISHvIc5ac9olq2KdcfYamnPCa2-OZynlT8NkNT0j08Gob1E95lksmF2vXRJ8ahzTl46cER7v2kqUBiQf2RMlJfo7seGaZV",
-                "dOBfifKBXIRHwgkus1hM_V:APA91bFBMEg6qAitKPLBdc6vGoEC0lMWJI1DNcHJzIcfQoyBpYbFbyfCgSl3ngwX31oklv4YusLq03GlC3PRvntTczcarL0Pm-2aBHaHEFzN4PEDWkHvs_AgZec35ZaDPdG0bmdnxR85",
-                "d3kaR7p9qkiNUBRET0ExaX:APA91bFhsUNe78CMu-30fchg3bgX4g96cibLLeyBpJ0ID6tefrAeJ0bdJf1_fFbM-N8m-txWMK8bgDACEJ7de4NnM6u-zzbbYLKTZ8wpqK6CiSRtGOG9LmYe0JGfHXHV_A5oNIINNg8x"]
+    //設定 伊閩0 為意外人員
+
+    
+
+    //客戶端的tokens 最近人員
+    let tokens = [{id:'伊閩1',token:"dgd5QBGk5AYMpe-qTUuGQ8:APA91bE-0tiruPvQbvy09IPwz8Gk01dPF-7qoUuWC-vOkG_PIdRm6vzo38V2xrZxwWwd2hgcqdX46JoazFLQfTIpDXvP0s4Fztc8vrmZQSIYtjXtPnKjPvvb2qpvtMwuBTrQBDeVXbZ6"},
+                {id:'伊閩2', token:"dOBfifKBXIRHwgkus1hM_V:APA91bFBMEg6qAitKPLBdc6vGoEC0lMWJI1DNcHJzIcfQoyBpYbFbyfCgSl3ngwX31oklv4YusLq03GlC3PRvntTczcarL0Pm-2aBHaHEFzN4PEDWkHvs_AgZec35ZaDPdG0bmdnxR85"},
+                {id:'伊閩3',token:"d3kaR7p9qkiNUBRET0ExaX:APA91bFhsUNe78CMu-30fchg3bgX4g96cibLLeyBpJ0ID6tefrAeJ0bdJf1_fFbM-N8m-txWMK8bgDACEJ7de4NnM6u-zzbbYLKTZ8wpqK6CiSRtGOG9LmYe0JGfHXHV_A5oNIINNg8x"}]
+    
+    //let tmp = tokens.filter(data=> data.id==='伊閩1' )
+    //console.log(tmp);
 
     //傳送給單一client
-    const sendToClient = (token) => {fetch('https://fcm.googleapis.com/fcm/send', {
+    const sendToClient = (  ) => {
+        fetch('https://fcm.googleapis.com/fcm/send', {
             'method': 'POST',
             'headers': {
                     'Authorization': 'key=AAAAK0Qb0Ok:APA91bEn4pe-h4XKOo3pMP3ll9E4MBSDX9DSGTVIwMRrII8cOKZlXZ3M7OD-rpi7cwvif4eUbZWoFSW2NOpnulPYG2IfuUsoVspMO-lBYI9drQ3fd4CstpC03N16JWLCEYDOW7SqgBkq',
@@ -48,21 +59,27 @@
                 },
             'body': JSON.stringify({
                     "data":{
-                        "message": message,
+                        'message':{
+                            'id':message.id,
+                            'status':message.status
+                        }
                     },
-                    "to": token,
+                    "to": "dOBfifKBXIRHwgkus1hM_V:APA91bFBMEg6qAitKPLBdc6vGoEC0lMWJI1DNcHJzIcfQoyBpYbFbyfCgSl3ngwX31oklv4YusLq03GlC3PRvntTczcarL0Pm-2aBHaHEFzN4PEDWkHvs_AgZec35ZaDPdG0bmdnxR85"
             })
             }).then(function(response) {
                 console.log(response);
             }).catch(function(error) {
-                alert(error)});}
+                alert(error)});
+        }
 
     //傳送給所有client
+    /*
     const sendToAllClient=(tokens)=>{
         tokens.forEach((data)=>
             sendToClient(data)
         )
     }
+    */
 
 </script>
 
