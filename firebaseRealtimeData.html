@@ -5,11 +5,12 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>發送消息至firebase</title>
+  <title>發送即時資料至firebase</title>
 </head>
 
 <body>
-  <!-- firebase 本身 ref 的設定 -->
+  
+  <!-- firebase 初始化 -->
   <script src="https://www.gstatic.com/firebasejs/5.10.0/firebase.js"></script>
   <script>
     // Initialize Firebase
@@ -23,11 +24,12 @@
     };
     firebase.initializeApp(config);
   </script>
+  <!-- firebase 初始化 -->
 
   <br>
   <div class="info">
-    <div class="info--title">工安監控 測資輸入(機具)</div>
-    <form onsubmit="return addtestDataMachineItem(this)">
+    <div class="info--title">工安系統 即時測試資料輸入</div>
+    <form onsubmit="return addTestData(this)">
       <label for="id">id</label><br>
       <input name="id" value="伊閩"><br>
       <label for="idDevice">idDevice</label><br>
@@ -40,21 +42,18 @@
       <label for="accident">accident</label><br>
       <input type="radio" id="accident" name="accident" value="0" checked>
       <label for="accident">正常</label><br>
-      
       <input type="radio" id="accident" name="accident" value="1" >
       <label for="accident">墜落待確認</label>
       <input type="radio" id="accident" name="accident" value="4" >
       <label for="accident">墜落確認安全</label>
       <input type="radio" id="accident" name="accident" value="7" >
       <label for="accident">墜落確認危險</label><br>
-      
       <input type="radio" id="accident" name="accident" value="2" >
       <label for="accident">跌倒待確認</label>
       <input type="radio" id="accident" name="accident" value="5" >
       <label for="accident">跌倒確認安全</label>
       <input type="radio" id="accident" name="accident" value="8" >
       <label for="accident">跌倒確認危險</label><br>
-      
       <input type="radio" id="accident" name="accident" value="3" >
       <label for="accident">昏迷待確認</label>
       <input type="radio" id="accident" name="accident" value="6" >
@@ -66,6 +65,7 @@
       <input name="latitude" min="25.049914" max="25.050234" step="0.000001" type="range" class="latitude"><br>
       <label for="longitude">longitude</label><br>
       <input name="longitude" min="121.568852" max="121.569117" step="0.000001" type="range" class="longitude"><br>
+      
       <label for="accX">accX</label><br>
       <input name="accX" value="0"><br>
       <label for="accY">accY</label><br>
@@ -87,19 +87,19 @@
       <label for="machine">false</label><br>
       <label for="machineName">machineName</label><br>
       <input name="machineName" value="挖土機XX號"><br><br>
-      <input type="submit" value="Add item">
-      <input type="button" value="Show list" onclick="console.log(testDataMachine)">
+      <input type="submit" value="加入資料">
+      <input type="button" value="顯示在console" onclick="console.log(testData)">
     </form>
-    <button onclick="writeDataMachine()">發送測試資料</button>
+    <button onclick="writeTestData()">發送即時測試資料</button>
   </div>
   <br>
-  <button onclick="delateAllData()">!!  清空firebase資料</button>
+  <button onclick="delateAllTestData()">!!  清空firebase資料</button>
 
   <script>
     
-    var testDataMachine= {}
-    function addtestDataMachineItem(form) {
-      testDataMachine = {             
+    var testData= {}
+    function addTestData(form) {
+      testData = {             
                   id:form.id.value,
                   idDevice:form.idDevice.value,
                   date:form.date.value,
@@ -129,12 +129,11 @@
     let todayDate = d.getFullYear()+'-'+checkTime(d.getMonth()+1)+'-'+checkTime(d.getDate());
     //const dateFormat = (dateObj) => dateObj.split(' ')[0].split('/').map(n => n.length === 1 ? '0' + n : n).join('-')
     //let todayDate = dateFormat(d.toLocaleString('zn-TW'))
-    let todaytime = checkTime(d.getHours())+":"+checkTime(d.getMinutes())+":"+checkTime(d.getSeconds())+":"+"0000";
+    let todayTime = checkTime(d.getHours())+":"+checkTime(d.getMinutes())+":"+checkTime(d.getSeconds())+":"+"0000";
     
     document.getElementsByClassName("date")[0].value = todayDate;
-    document.getElementsByClassName("time")[0].value = todaytime;
-    document.getElementsByClassName("date")[1].value = todayDate;
-    document.getElementsByClassName("time")[1].value = todaytime;
+    document.getElementsByClassName("time")[0].value = todayTime;
+    
     }
     setInterval(updateTime, 1000);
     
@@ -149,8 +148,7 @@
     
     document.getElementsByClassName("latitude")[0].value = randLatitude;
     document.getElementsByClassName("longitude")[0].value = randLongitude;
-    document.getElementsByClassName("latitude")[1].value = randLatitude;
-    document.getElementsByClassName("longitude")[1].value = randLongitude;
+    
     }
     setInterval(updateLatLon, 1000);
     
@@ -158,13 +156,12 @@
 
     //firebase
     const db = firebase.database()
-    let childKeyList = []
-    // 寫入資料(一般)
-    function writeData(){db.ref(`/CTC/${testData.date}_${testData.time}_${testData.id}`).set(testData)};
-    // 寫入資料(機具)
-    function writeDataMachine(){db.ref(`/CTC/${testDataMachine.date}_${testDataMachine.time}_${testDataMachine.id}`).set(testDataMachine)};
     
-    function delateAllData (){db.ref(`/CTC/`).set('')};
+    // 寫入資料(一般)
+    function writeTestData(){db.ref(`/CTC/${testData.date}_${testData.time}_${testData.id}`).set(testData)};
+    
+    
+    function delateAllTestData (){db.ref(`/CTC/`).set('')};
 
     // 刪除單一資料
     // db.ref(`/CTC/${testData.date}_${testData.time}_${testData.id}`).remove();

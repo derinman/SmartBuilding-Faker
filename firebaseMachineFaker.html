@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>發送大型機具相關資料至firebase</title>
+</head>
+
+<body>
+    
+    <!-- firebase 初始化 -->
+    <script src="https://www.gstatic.com/firebasejs/5.10.0/firebase.js"></script>
+    <script>
+    // Initialize Firebase
+    var config = {
+      // apiKey: "AIzaSyDXcHE4Tmy8sStP4T1Nsnr25_G7iLjt7HI",
+      // authDomain: "water-c1ecf.firebaseapp.com",
+        databaseURL: "https://water-c1ecf.firebaseio.com",
+      // projectId: "water-c1ecf",
+      // storageBucket: "water-c1ecf.appspot.com",
+      // messagingSenderId: "185826267369"
+    };
+    firebase.initializeApp(config);
+    </script>
+    <!-- firebase 初始化 -->
+
+    <br>
+    <div class="info">
+        <div class="info--title">工安系統 機具測試資料輸入</div>
+            <form onsubmit="return addMachineData(this)">
+                
+                <label for="date">date</label><br>
+                <input name="date" value="" type="date" class="date"><br>
+                <label for="time">time</label><br>
+                <input name="time" value="00:00:00:000" class="time"><br>
+                
+                <label for="latitude">latitude</label><br>
+                <input name="latitude" min="25.049914" max="25.050234" step="0.000001" type="range" class="latitude"><br>
+                <label for="longitude">longitude</label><br>
+                <input name="longitude" min="121.568852" max="121.569117" step="0.000001" type="range" class="longitude"><br>
+                <label for="altitude">altitude</label><br>
+                <input name="altitude" value="37"><br>
+                
+                <label for="site">site</label><br>
+                <input name="site" value="CTC"><br>
+    
+                <label for="machineName">machineName</label><br>
+                <input name="machineName" value="挖土機XX號"><br><br>
+                
+                <input type="submit" value="加入資料">
+                <input type="button" value="顯示在console" onclick="console.log(MachineData)">
+
+            </form>
+            <button onclick="writeMachineData()">發送機具測試資料</button>
+  </div>
+  <br>
+  <button onclick="delateAllMachineData()">!!  清空firebase資料</button>
+
+  <script>
+    
+    var machineData= {}
+    function addMachineData(form) {
+      machineData = {             
+                  date:form.date.value,
+                  time:form.time.value,
+                  latitude:parseFloat(form.latitude.value),
+                  site:form.site.value,
+                  altitude:parseFloat(form.altitude.value),
+                  longitude:parseFloat(form.longitude.value),
+                  machineName:form.machineName.value,
+                  };
+    return false;
+    }
+
+    // 設定今日現在時間為預設
+    function checkTime(i) {
+        return (i < 10) ? "0" + i : i;
+    }
+    function updateTime(){
+    let d = new Date();
+    let todayDate = d.getFullYear()+'-'+checkTime(d.getMonth()+1)+'-'+checkTime(d.getDate());
+    let todayTime = checkTime(d.getHours())+":"+checkTime(d.getMinutes())+":"+checkTime(d.getSeconds())+":"+"0000";
+    
+    document.getElementsByClassName("date")[0].value = todayDate;
+    document.getElementsByClassName("time")[0].value = todayTime;
+    
+    }
+    setInterval(updateTime, 1000);
+    
+    //隨機跳動經緯度
+    function updateLatLon(){
+    let latitudeMin = 25.049914;
+    let latitudeMax = 25.050234;
+    let longitudeMin = 121.568852;
+    let longitudeMax = 121.569117;
+    randLatitude = (latitudeMax-latitudeMin)*Math.random()+latitudeMin
+    randLongitude = (longitudeMax-longitudeMin)*Math.random()+longitudeMin
+    document.getElementsByClassName("latitude")[0].value = randLatitude;
+    document.getElementsByClassName("longitude")[0].value = randLongitude;
+    }
+    setInterval(updateLatLon, 1000);
+
+    //firebase
+    const db = firebase.database()
+    //寫入機具資料
+    function writeMachineData(){db.ref(`/CTC_MACHINE/${machineData.date}_${machineData.time}_${machineData.machineName}`).set(machineData)};
+    //刪除所有資料
+    function delateAllMachineData (){db.ref(`/CTC_MACHINE/`).set('')};
+
+  </script>
+
+</body onload="startTime()">
+
+</html>
