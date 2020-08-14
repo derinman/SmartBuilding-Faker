@@ -47,8 +47,11 @@
                 <input name="site" value="CTC"><br>
     
                 <label for="machineName">machineName</label><br>
-                <input name="machineName" value="挖土機XX號"><br><br>
+                <input name="machineName" value="挖土機XX號"><br>
                 
+                <label for="radius">radius</label><br>
+                <input name="radius" value="10"><br><br>
+
                 <input type="submit" value="加入資料">
                 <input type="button" value="顯示在console" onclick="console.log(MachineData)">
 
@@ -70,6 +73,7 @@
                   altitude:parseFloat(form.altitude.value),
                   longitude:parseFloat(form.longitude.value),
                   machineName:form.machineName.value,
+                  radius:parseFloat(form.radius.value)
                   };
     return false;
     }
