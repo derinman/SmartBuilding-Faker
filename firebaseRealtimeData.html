@@ -73,7 +73,7 @@
       <label for="accZ">accZ</label><br>
       <input name="accZ" value="0"><br>
       <label for="portent">portent</label><br>
-      <input name="portent" value="1"><br>
+      <input name="portent" value="0"><br>
       <label for="site">site</label><br>
       <input name="site" value="CTC"><br>
       <label for="altitude">altitude</label><br>
@@ -89,9 +89,9 @@
       <input name="machineName" value="挖土機XX號"><br>      
 
       <label for="receiveAns">receiveAns</label><br>
-      <input style=" height:50px;" rows="1" cols="40"  name="receiveAns" value="{type:'machine' ,id:,accident:     }"><br>
+      <input style=" height:50px;" rows="1" cols="40"  name="receiveAns" value='{"id":"哈哈人", "accident":0}'><br>
       <label for="token">token</label><br>
-      <input name="token" value="c-ifMrpUbc4:APA91bHN__hP8hDvOFPgyYYy8X2c-TKorN5O1wUjDvjY6klYa3EjesV5rsaATBj2bO55ufSVigDxuTUK1XUCoH5KlmohlBEgew6-lmF6IINomDMtiQdVPepF5YC4PjQPXX0wYZv3c4MY"><br><br>
+      <input name="token" value="cDZ1obBQK8E:APA91bHFcI0nGJsUvhbPn5uQACz14Nj8FEQu1CPl9YgDmpLXTE4QjDn7p4B6gID8v9FhHakqtZyo6zX3QFp41yKvdJ2Ss9-RE9Wl7j9bv13Gh-MWc-KQJL5FAWhTHA1Oc6YkRW0HOjI1"><br><br>
 
       <input type="submit" value="加入資料">
       <input type="button" value="顯示在console" onclick="console.log(testData)">
@@ -121,7 +121,7 @@
                   altitude:parseFloat(form.altitude.value),
                   longitude:parseFloat(form.longitude.value),
                   heartRate:parseFloat(form.heartRate.value),
-                  machine:form.machine.value,
+                  machine:JSON.parse(form.machine.value),
                   machineName:form.machineName.value,
                   receiveAns:form.receiveAns.value,
                   token:form.token.value
