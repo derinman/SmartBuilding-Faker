@@ -1,0 +1,142 @@
+<!--
+    [{
+        altitude: 34,
+        areaID: "危區1",
+        areaName: "test",
+        date: "2020-06-24",
+        latitude: maxLat - 0.00001 * 16,
+        longitude: maxLon - 0.00001 * 11,
+        photo: "",
+        site: "CTC",
+        time: "12:00:00:000",
+        timeStamp: 1592971200000,
+    },
+    {
+        altitude: 34,
+        areaID: "危區1",
+        areaName: "test1",
+        date: "2020-06-24",
+        latitude: maxLat - 0.00001 * 19,
+        longitude: minLon + 0.00001 * 8,
+        photo: "",
+        site: "CTC",
+        time: "12:00:05:000",
+        timeStamp: 1592971205000,
+    },]
+!-->
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>發送危區資料至firebase</title>
+</head>
+
+<body>
+    <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-firestore.js"></script>
+    
+    <script>
+    const  config = {
+        apiKey: "AIzaSyDXcHE4Tmy8sStP4T1Nsnr25_G7iLjt7HI",
+        authDomain: "water-c1ecf.firebaseapp.com",
+        projectId: "water-c1ecf",
+    };
+    firebase.initializeApp(config);
+    const db = firebase.firestore();
+    </script>
+
+    <br>
+    <div class="info">
+        <div class="info--title">工安系統 危險區域測試資料輸入</div>
+            
+            <form onsubmit="console.log('宋拉')">
+                <label for="altitude">altitude</label><br>
+                <input name="altitude" value=34><br>
+                <label for="areaID">areaID</label><br>
+                <input name="areaID" value="危區X"><br>
+                
+                <label for="date">date</label><br>
+                <input name="date" value="" type="date" class="date"><br>
+                <label for="time">time</label><br>
+                <input name="time" value="00:00:00:000" class="time"><br>
+
+                <label for="latitude">latitude</label><br>
+                <input name="latitude" min="25.049914" max="25.050234" step="0.000001" type="range" class="latitude"><br>
+                <label for="longitude">longitude</label><br>
+                <input name="longitude" min="121.568852" max="121.569117" step="0.000001" type="range" class="longitude"><br>
+                
+                <label for="photo">photo</label><br>
+                <input id="photo" name="photo"></input><br><br>
+                <label for="site">site</label><br>
+                <input name="site" value="CTC"><br><br>
+
+                <input type="submit" value="加入資料">
+                <input type="button" value="顯示在console" onclick="console.log(testData)">
+            </form>
+        
+        <button onclick="writeTestData()">發送即時測試資料</button>
+        </div>
+    </div>
+    <br>
+    <button onclick="delateAllTestData()">!!  清空firebase資料</button>
+
+
+
+
+
+
+    <script>
+    let latitudeMin = 25.049914;
+    let latitudeMax = 25.050234;
+    let longitudeMin = 121.568852;
+    let longitudeMax = 121.569117;
+    
+    db.collection("CTC").doc("危區10").set({
+        
+        altitude: 34,
+        areaID: "危區一",
+        areaName: "test",
+        date: "2020-06-24",
+        latitude: latitudeMax - 0.00001 * 16,
+        longitude: longitudeMax - 0.00001 * 11,
+        photo: "???",
+        site: "CTC",
+        time: "12:00:00:000",
+        timeStamp: 1592971200000
+        
+    })
+    .then(function(docRef) {
+        console.log("Document written with ID: ", '恩');
+    })
+    .catch(function(error) {
+        console.error("Error adding document: ", error);
+    });
+
+
+    /*
+    db.collection("cities").doc("LA").set({
+    name: "Los Angeles",
+    state: "CA",
+    country: "USA"
+    })
+    .then(function() {
+        console.log("Document successfully written!");
+    })
+    .catch(function(error) {
+        console.error("Error writing document: ", error);
+    });  
+
+    var cityRef = db.collection('cities').doc('BJ');
+
+    var setWithMerge = cityRef.set({
+        capital: true
+    }, { merge: true });
+    */
+
+    </script>
+
+</body>
