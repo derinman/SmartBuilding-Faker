@@ -51,42 +51,105 @@
 
     <br>
     <div class="info">
-        <div class="info--title">工安系統 危險區域測試資料輸入</div>
+        <div class="info--title">工安系統 危險區域測試資料輸入</div><br>
             
-            <form onsubmit="console.log('宋拉')">
+            <form onsubmit="return addTestData(this)">
                 <label for="altitude">altitude</label><br>
                 <input name="altitude" value=34><br>
                 <label for="areaID">areaID</label><br>
                 <input name="areaID" value="危區X"><br>
+                <label for="areaName">areaName</label><br>
+                <input name="areaName" value="test"><br>
                 
                 <label for="date">date</label><br>
                 <input name="date" value="" type="date" class="date"><br>
                 <label for="time">time</label><br>
                 <input name="time" value="00:00:00:000" class="time"><br>
+                <label for="timeStamp">timeStamp</label><br>
+                <input name="timeStamp" class="timeStamp"><br>
 
                 <label for="latitude">latitude</label><br>
                 <input name="latitude" min="25.049914" max="25.050234" step="0.000001" type="range" class="latitude"><br>
                 <label for="longitude">longitude</label><br>
                 <input name="longitude" min="121.568852" max="121.569117" step="0.000001" type="range" class="longitude"><br>
                 
-                <label for="photo">photo</label><br>
-                <input id="photo" name="photo"></input><br><br>
                 <label for="site">site</label><br>
-                <input name="site" value="CTC"><br><br>
+                <input name="site" value="CTC"><br>
+
+                <label for="photo">photo</label><br>
+                <input id="photo" name="photo" type="file" class="photo"></input><br><br>
+                
+                <br>
 
                 <input type="submit" value="加入資料">
                 <input type="button" value="顯示在console" onclick="console.log(testData)">
             </form>
         
-        <button onclick="writeTestData()">發送即時測試資料</button>
+        <button onclick="">發送即時測試資料</button>
         </div>
     </div>
     <br>
     <button onclick="delateAllTestData()">!!  清空firebase資料</button>
 
+    <script>
+        
+        let testData= {}
+        let input = document.querySelector('input[type=file]');
+        let tmp;
 
+        //照片轉為base64
+        input.onchange = function () {
+            let file = input.files[0],
+            reader = new FileReader();
+            console.log(reader)
+            reader.onloadend = function () {
+                // Since it contains the Data URI, we should remove the prefix and keep only Base64 string
+                let b64 = reader.result.replace(/^data:.+;base64,/, '');
+                console.log(b64); //-> "R0lGODdhAQABAPAAAP8AAAAAACwAAAAAAQABAAACAkQBADs="
+                tmp = b64;
+            };
+            reader.readAsDataURL(file);
+        }
+        
+        function addTestData(form) {
+            testData = {             
+                altitude:parseFloat(form.altitude.value),
+                areaID:form.areaID.value,
+                areaName:form.areaName.value,
+                date:form.date.value,
+                time:form.time.value,
+                timeStamp:parseInt(form.timeStamp.value),
+                latitude:parseFloat(form.latitude.value),
+                longitude:parseFloat(form.longitude.value),
+                site:form.site.value,
+                photo:tmp,
+                };
+                
+    return false;
+    }
+    </script>>
+    
+    <!--date time timeStamp-->
+    <script>
+        function checkTime(i) {
+        return (i < 10) ? "0" + i : i;
+        }
+        function updateTime(){
+        let d = new Date();
+        let todayDate = d.getFullYear()+'-'+checkTime(d.getMonth()+1)+'-'+checkTime(d.getDate());
+        let todayTime = checkTime(d.getHours())+":"+checkTime(d.getMinutes())+":"+checkTime(d.getSeconds())+":"+"0000";
+        
+        document.getElementsByClassName("date")[0].value = todayDate;
+        document.getElementsByClassName("time")[0].value = todayTime;
+        document.getElementsByClassName("timeStamp")[0].value = d.getTime();
+        }
+        setInterval(updateTime, 1000);
+    </script>
 
-
+    <!--photo-->
+    <script>
+        
+    </script>
 
 
     <script>
