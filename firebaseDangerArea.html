@@ -1,30 +1,3 @@
-<!--
-    [{
-        altitude: 34,
-        areaID: "危區1",
-        areaName: "test",
-        date: "2020-06-24",
-        latitude: maxLat - 0.00001 * 16,
-        longitude: maxLon - 0.00001 * 11,
-        photo: "",
-        site: "CTC",
-        time: "12:00:00:000",
-        timeStamp: 1592971200000,
-    },
-    {
-        altitude: 34,
-        areaID: "危區1",
-        areaName: "test1",
-        date: "2020-06-24",
-        latitude: maxLat - 0.00001 * 19,
-        longitude: minLon + 0.00001 * 8,
-        photo: "",
-        site: "CTC",
-        time: "12:00:05:000",
-        timeStamp: 1592971205000,
-    },]
-!-->
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -59,7 +32,7 @@
                 <label for="areaID">areaID</label><br>
                 <input name="areaID" value="危區X"><br>
                 <label for="areaName">areaName</label><br>
-                <input name="areaName" value="test"><br>
+                <input name="areaName" value="" class="areaName"><br>
                 
                 <label for="date">date</label><br>
                 <input name="date" value="" type="date" class="date"><br>
@@ -83,15 +56,20 @@
 
                 <input type="submit" value="加入該地點">
                 <br>
-                <input type="button" value="顯示在console" onclick="console.log(testDataArray)">
+                
             </form>
         
-        <button onclick="test()">發送即時測試資料</button>
+        <button onclick="sendTestData()">發送即時測試資料</button><br><br>
+        <input type="button" value="顯示在console" onclick="console.log(testDataArray)">
         </div>
     </div>
     <br>
-    <button onclick=""> !! 清空firebase資料</button>
+    
+    <label for="deleteArea">刪除區域</label><br>
+    <input id="deleteArea" name="deleteArea" value="危區X" class="deleteArea"></input><br>
+    <button onclick="deleteArea()"> !!清空firebase資料</button>
 
+    <!--handle data from form-->
     <script>
         let testDataArray=[]
 
@@ -99,7 +77,6 @@
         let input = document.querySelector('input[type=file]');
         let tmp;
         
-
         //照片轉為base64
         input.onchange = function () {
             let file = input.files[0],
@@ -125,7 +102,7 @@
                 latitude:parseFloat(form.latitude.value),
                 longitude:parseFloat(form.longitude.value),
                 site:form.site.value,
-                photo: tmp ===undefined? '':tmp ,
+                photo: tmp === undefined ? '' : tmp,
                 };
             testDataArray.push(testData)
             console.log(testDataArray)
@@ -143,46 +120,68 @@
         function checkTime(i) {
         return (i < 10) ? "0" + i : i;
         }
+        function checkMsec(i) {
+            if (i < 10){
+                return "00"+i+"0"
+            }else if (i<100){
+                return "0"+i+"0"
+            }else{
+                return i+"0"
+            }
+        }
+
         function updateTime(){
         let d = new Date();
         let todayDate = d.getFullYear()+'-'+checkTime(d.getMonth()+1)+'-'+checkTime(d.getDate());
-        let todayTime = checkTime(d.getHours())+":"+checkTime(d.getMinutes())+":"+checkTime(d.getSeconds())+":"+"0000";
-        
+        let todayTime = checkTime(d.getHours())+":"+checkTime(d.getMinutes())+":"+checkTime(d.getSeconds())+":"+checkMsec(d.getMilliseconds())
+
         document.getElementsByClassName("date")[0].value = todayDate;
         document.getElementsByClassName("time")[0].value = todayTime;
         document.getElementsByClassName("timeStamp")[0].value = d.getTime();
         }
-        setInterval(updateTime, 1000);
+        setInterval(updateTime, 10);
     </script>
 
     <script>
-    //const test=()=> testDataArray.forEach(data=>console.log(data))
+        function updateAreaName(){
+            document.getElementsByClassName("areaName")[0].value = Math.floor(Math.random()*1000);
+        }
+        setInterval(updateAreaName,100)    
+    </script>
 
-
-    
+    <!--firebase-->
+    <script>
     
     
     const dangerAreaRef = db.collection("CTC_dangerArea")
     
-    const test = ()=>{
-
-    testDataArray.forEach((data)=>{
-    console.log(data)
+    const sendTestData = ()=>{
     
-    dangerAreaRef.doc(`${data.areaID}_${data.date}_${data.time}`).set(
-        data,
+    testDataArray.forEach( (data) => {
+    dangerAreaRef.doc(`${data.areaID}`).set(
+        { [data.areaName] : data },
         { merge : true }
     )
     .then(function() {
         console.log("Document successfully written!");
+        
     })
     .catch(function(error) {
         console.error("Error adding document: ", error);
     });
-    }
-    )
+    })
+    
+    //clear
+    testDataArray=[];
+
     }
     
+    
+    const deleteArea = ()=>{
+        let area = document.getElementsByClassName("deleteArea")[0].value
+        console.log(area)
+        dangerAreaRef.doc(area).delete()
+    }
     
 
     </script>
