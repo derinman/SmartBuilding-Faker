@@ -84,7 +84,8 @@
             console.log(reader)
             reader.onloadend = function () {
                 // Since it contains the Data URI, we should remove the prefix and keep only Base64 string
-                let b64 = reader.result.replace(/^data:.+;base64,/, '');
+                let b64 = reader.result
+                //let b64 = reader.result.replace(/^data:.+;base64,/, '');
                 //console.log(b64); 
                 tmp = b64
             };
@@ -98,7 +99,7 @@
                 areaName:form.areaName.value,
                 date:form.date.value,
                 time:form.time.value,
-                timeStamp:parseInt(form.timeStamp.value),
+                timeStamp:String(form.timeStamp.value),
                 latitude:parseFloat(form.latitude.value),
                 longitude:parseFloat(form.longitude.value),
                 site:form.site.value,
