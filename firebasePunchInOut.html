@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>發送打卡資料至firebase</title>
+</head>
+
+<body>
+    <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.19.1/firebase-firestore.js"></script>
+    
+    <script>
+    const  config = {
+        apiKey: "AIzaSyDXcHE4Tmy8sStP4T1Nsnr25_G7iLjt7HI",
+        authDomain: "water-c1ecf.firebaseapp.com",
+        projectId: "water-c1ecf",
+    };
+    firebase.initializeApp(config);
+    const db = firebase.firestore();
+    //console.log(db)
+    </script>
+
+    <br>
+    <div class="info">
+        <div class="info--title">工安系統 危險區域測試資料輸入</div><br>
+        
+        <form onsubmit="return addTestData(this)">
+            
+            <label for="id">id</label><br>
+            <input name="id" value="薛伊閩"><br>
+            
+            <label for="title">title</label><br>
+            <input type="radio" id="title" name="title" value="上班" checked>
+            <label for="title">上班</label><br>
+            <input type="radio" id="title" name="title" value="下班" checked>
+            <label for="title">下班</label><br>
+            <input type="radio" id="title" name="title" value="加班" checked>
+            <label for="title">加班</label><br>
+            <input type="radio" id="title" name="title" value="事假" checked>
+            <label for="title">事假</label><br>
+            <input type="radio" id="title" name="title" value="特休" checked>
+            <label for="title">特休</label><br>
+            <input type="radio" id="title" name="title" value="曠職" checked>
+            <label for="title">曠職</label><br>
+
+
+            <label for="date">date</label><br>
+            <input name="date" value="" type="date" class="date"><br>
+            <label for="time">time</label><br>
+            <input name="time" value="00:00:00:000" class="time"><br>
+            <label for="timeStamp">timeStamp</label><br>
+            <input name="timeStamp" class="timeStamp"><br>
+            
+            <label for="site">site</label><br>
+            <input name="site" value="CTC"><br><br><br>
+
+            <input type="submit" value="加入該資料">
+            <br>
+            
+        </form>
+    
+        <button onclick="sendTestData()">發送打卡資料</button><br><br>
+        <input type="button" value="顯示在console" onclick="console.log(testData)">
+        </div>
+    </div>
+    <br>
+
+    <!--handle data from form-->
+    <script>
+
+        let testData= {}
+        
+        function addTestData(form) {
+            testData = {             
+                id:form.id.value,
+                title:form.title.value,
+                date:form.date.value,
+                time:form.time.value,
+                timeStamp:String(form.timeStamp.value),
+                site:form.site.value,
+                };
+            return false;
+        }
+
+    </script>
+
+    <!--date time timeStamp-->
+    <script>
+        function checkTime(i) {
+        return (i < 10) ? "0" + i : i;
+        }
+        function checkMsec(i) {
+            if (i < 10){
+                return "00"+i+"0"
+            }else if (i<100){
+                return "0"+i+"0"
+            }else{
+                return i+"0"
+            }
+        }
+        function updateTime(){
+        let d = new Date();
+        let todayDate = d.getFullYear()+'-'+checkTime(d.getMonth()+1)+'-'+checkTime(d.getDate());
+        let todayTime = checkTime(d.getHours())+":"+checkTime(d.getMinutes())+":"+checkTime(d.getSeconds())+":"+checkMsec(d.getMilliseconds())
+
+        document.getElementsByClassName("date")[0].value = todayDate;
+        document.getElementsByClassName("time")[0].value = todayTime;
+        document.getElementsByClassName("timeStamp")[0].value = d.getTime();
+        }
+        setInterval(updateTime, 10);
+    </script>
+
+    <!--firebase-->
+    <script>
+        const punchInOutRef = db.collection("CTC_punchInOut")
+    
+        const sendTestData = ()=>{    
+            punchInOutRef.doc(`${testData.date}`).collection(`${testData.id}`).doc(`${testData.title}`).set(
+            testData ,
+            { merge : true }
+        )
+        .then(function() {
+            console.log("Document successfully written!");
+        })
+        .catch(function(error) {
+            console.error("Error adding document: ", error);
+        });
+        }
+    
+    </script>
+
+</body>
+
+</html>
