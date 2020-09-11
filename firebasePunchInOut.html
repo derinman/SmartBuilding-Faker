@@ -33,24 +33,27 @@
             <input name="id" value="薛伊閩"><br>
             
             <label for="title">title</label><br>
-            <input type="radio" id="title" name="title" value="上班" checked>
+            <input type="radio" id="title1" name="title" value="上班" class="title" checked>
             <label for="title">上班</label><br>
-            <input type="radio" id="title" name="title" value="下班" checked>
-            <label for="title">下班</label><br>
-            <input type="radio" id="title" name="title" value="加班" checked>
+            <input type="radio" id="title2" name="title" value="下班" class="title" >
+            <label for="title">下班</label><br><br>
+            <input type="radio" id="title3" name="title" value="加班" class="title">
             <label for="title">加班</label><br>
-            <input type="radio" id="title" name="title" value="事假" checked>
+            <input type="radio" id="title4" name="title" value="事假" class="title">
             <label for="title">事假</label><br>
-            <input type="radio" id="title" name="title" value="特休" checked>
+            <input type="radio" id="title5" name="title" value="特休" class="title">
             <label for="title">特休</label><br>
-            <input type="radio" id="title" name="title" value="曠職" checked>
+            <input type="radio" id="title6" name="title" value="曠職" class="title">
             <label for="title">曠職</label><br>
-
 
             <label for="date">date</label><br>
             <input name="date" value="" type="date" class="date"><br>
-            <label for="time">time</label><br>
-            <input name="time" value="00:00:00:000" class="time"><br>
+            
+            <label for="start_time">start_time</label><br>
+            <input name="start_time" value="00:00:00:000" class="start_time"><br>
+            <label for="end_time">end_time</label><br>
+            <input name="end_time" value="00:00:00:000" class="end_time"><br>
+            
             <label for="timeStamp">timeStamp</label><br>
             <input name="timeStamp" class="timeStamp"><br>
             
@@ -68,6 +71,10 @@
     </div>
     <br>
 
+    <script>
+
+    </script>
+
     <!--handle data from form-->
     <script>
 
@@ -78,7 +85,8 @@
                 id:form.id.value,
                 title:form.title.value,
                 date:form.date.value,
-                time:form.time.value,
+                start_time:form.start_time.value,
+                end_time:form.end_time.value,
                 timeStamp:String(form.timeStamp.value),
                 site:form.site.value,
                 };
@@ -88,7 +96,8 @@
     </script>
 
     <!--date time timeStamp-->
-    <script>
+    <script>        
+        
         function checkTime(i) {
         return (i < 10) ? "0" + i : i;
         }
@@ -102,16 +111,21 @@
             }
         }
         function updateTime(){
-        let d = new Date();
-        let todayDate = d.getFullYear()+'-'+checkTime(d.getMonth()+1)+'-'+checkTime(d.getDate());
-        let todayTime = checkTime(d.getHours())+":"+checkTime(d.getMinutes())+":"+checkTime(d.getSeconds())+":"+checkMsec(d.getMilliseconds())
+        
+            let d = new Date();
+            let todayDate = d.getFullYear()+'-'+checkTime(d.getMonth()+1)+'-'+checkTime(d.getDate());
+            let todayTime = checkTime(d.getHours())+":"+checkTime(d.getMinutes())+":"+checkTime(d.getSeconds())+":"+checkMsec(d.getMilliseconds())
+            let todayTimePlusOneHour = checkTime(d.getHours()+1)+":"+checkTime(d.getMinutes())+":"+checkTime(d.getSeconds())+":"+checkMsec(d.getMilliseconds())
 
-        document.getElementsByClassName("date")[0].value = todayDate;
-        document.getElementsByClassName("time")[0].value = todayTime;
-        document.getElementsByClassName("timeStamp")[0].value = d.getTime();
+            document.getElementsByClassName("date")[0].value = todayDate;
+            document.getElementsByClassName("start_time")[0].value = todayTime;
+            document.getElementsByClassName("end_time")[0].value = todayTimePlusOneHour;
+            document.getElementsByClassName("timeStamp")[0].value = d.getTime();
+        
         }
         setInterval(updateTime, 10);
     </script>
+    
 
     <!--firebase-->
     <script>
