@@ -104,7 +104,10 @@
 
   <script>
     
-    var testData= {}
+    let testData= {}
+    let ISRANDLATLON = true;
+    //let ISRANDLATLON = false;
+    
     function addTestData(form) {
       testData = {             
                   id:form.id.value,
@@ -126,6 +129,7 @@
                   receiveAns:form.receiveAns.value,
                   token:form.token.value
                   };
+      
     return false;
     }
 
@@ -148,38 +152,28 @@
     
     //隨機跳動經緯度
     function updateLatLon(){
-    let latitudeMin = 25.049914;
-    let latitudeMax = 25.050234;
-    let longitudeMin = 121.568852;
-    let longitudeMax = 121.569117;
-    randLatitude = (latitudeMax-latitudeMin)*Math.random()+latitudeMin
-    randLongitude = (longitudeMax-longitudeMin)*Math.random()+longitudeMin
+      let latitudeMin = 25.049914;
+      let latitudeMax = 25.050234;
+      let longitudeMin = 121.568852;
+      let longitudeMax = 121.569117;
+      randLatitude = (latitudeMax-latitudeMin)*Math.random()+latitudeMin
+      randLongitude = (longitudeMax-longitudeMin)*Math.random()+longitudeMin
     
-    document.getElementsByClassName("latitude")[0].value = randLatitude;
-    document.getElementsByClassName("longitude")[0].value = randLongitude;
+      document.getElementsByClassName("latitude")[0].value = randLatitude;
+      document.getElementsByClassName("longitude")[0].value = randLongitude;
     
     }
-    setInterval(updateLatLon, 1000);
     
+    ISRANDLATLON?setInterval(updateLatLon, 1000):null
     
-
     //firebase
     const db = firebase.database()
     
     // 寫入資料(一般)
-    function writeTestData(){db.ref(`/CTC/${testData.date}_${testData.time}_${testData.id}`).set(testData)};
+    function writeTestData(){db.ref(`/${testData.site}_MEMBER/${testData.date}/${testData.time}_${testData.id}`).set(testData)};
     
     
     function delateAllTestData (){db.ref(`/CTC/`).set('')};
-
-    // 刪除單一資料
-    // db.ref(`/CTC/${testData.date}_${testData.time}_${testData.id}`).remove();
-    //db.ref(`/CTC/`).remove()
-    // 刪除 搜尋資料 by value後 remove
-    // db.ref(`/${testData.site}`).orderByChild('id').equalTo('測試').once('child_added', function (snapshot) {
-      // console.log(snapshot.toJSON())
-      // snapshot.ref.remove();
-    // });
 
   </script>
 
